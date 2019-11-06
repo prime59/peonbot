@@ -1,3 +1,12 @@
+# Config files that contain sensitive information
+bot/config/ban_list.yaml
+bot/config/greetings.yaml
+bot/config/priveleged_list.yaml
+bot/tokens/token.yaml
+
+# Go-generated html coverage reports are piped here for consumption
 coverage/
-bot/config/
-bot/tokens/
+
+# Dev coverage artifacts
+src/count.out
+src/coverage.html
