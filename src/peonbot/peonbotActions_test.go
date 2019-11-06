@@ -15,10 +15,10 @@ func getAction(command string, payload _payload) _event {
 	}
 }
 
-func getExpectedRequest(command string, payload interface{}) _request {
+func getExpectedRequest(command string, rid int, payload interface{}) _request {
 	return _request{
 		Command:   command,
-		RequestId: 1, /* rid is never set from handleAction */
+		RequestId: rid, /* rid is never set from handleAction */
 		Payload:   payload,
 	}
 }
@@ -330,7 +330,7 @@ func TestHandleActionKick(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAction{UserId: _TEST_USERID_155}
-	expected := getExpectedRequest(_REQUEST_KICK, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_KICK, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -366,7 +366,7 @@ func TestHandleActionBan(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAction{UserId: _TEST_USERID_155}
-	expected := getExpectedRequest(_REQUEST_BAN, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_BAN, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -394,7 +394,7 @@ func TestHandleActionUnban(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAction{ToonName: _TEST_USERNAME_PRIVUSER155}
-	expected := getExpectedRequest(_REQUEST_UNBAN, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_UNBAN, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -424,7 +424,7 @@ func TestHandleActionSay(t *testing.T) {
 	expectedPayload := _payloadMessage{
 		Message: "hi",
 	}
-	expected := getExpectedRequest(_REQUEST_MSG, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_MSG, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -463,7 +463,7 @@ func TestHandleActionWhisper(t *testing.T) {
 		Message: "blah blah blah...",
 		UserId:  strconv.Itoa(_TEST_USERID_155),
 	}
-	expected := getExpectedRequest(_REQUEST_WHISPER, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_WHISPER, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -498,7 +498,7 @@ func TestHandleActionDesignate(t *testing.T) {
 	})
 
 	var actual _request
-	expected := getExpectedRequest(_REQUEST_DESIGN, nil)
+	expected := getExpectedRequest(_REQUEST_DESIGN, 1, nil)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -556,7 +556,7 @@ func TestHandleActionAddBan(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAction{UserId: _TEST_USERID_61}
-	expected := getExpectedRequest(_REQUEST_BAN, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_BAN, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -575,7 +575,9 @@ func TestHandleActionAddBan(t *testing.T) {
 		t.Error(err)
 	}
 
-	if err := assertDeepEqualsPayloadAction(expectedPayload, actual.Payload.(_payloadAction)); err != nil {
+	if err := assertDeepEqualsPayloadAction(
+		expectedPayload, actual.Payload.(_payloadAction)); err != nil {
+
 		t.Error(err)
 	}
 }
@@ -588,7 +590,7 @@ func TestHandleActionRmBan(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAction{ToonName: _TEST_USERNAME_TESTUSER61_GATEWAY}
-	expected := getExpectedRequest(_REQUEST_UNBAN, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_UNBAN, 1, expectedPayload)
 
 	client := getEchoClient()
 	testbot := getTestbot()
@@ -610,7 +612,22 @@ func TestHandleActionRmBan(t *testing.T) {
 		t.Error(err)
 	}
 
-	if err := assertDeepEqualsPayloadAction(expectedPayload, actual.Payload.(_payloadAction)); err != nil {
+	if err := assertDeepEqualsPayloadAction(
+		expectedPayload, actual.Payload.(_payloadAction)); err != nil {
+
 		t.Error(err)
+	}
+}
+
+func TestActionUnhandledAction(t *testing.T) {
+	action := getAction(_EVENT_MSG, _payload{
+		UserId:  _TEST_USERID_155,
+		Message: ".unrecognizedaction " + _TEST_USERNAME_TESTUSER61_GATEWAY,
+	})
+
+	testbot := getTestbot()
+
+	if err := handleAndReturn(nil, testbot, action); err == nil {
+		t.Errorf("Expected an error from sending an unrecognized action, but got nil.")
 	}
 }

@@ -23,8 +23,8 @@ const _ACTION_RMBAN = ".RMBAN"
 */
 // const _ACTION_SETGREET = ".SETGREET"
 
-func errActionIgnoreIncomplete() error {
-	return fmt.Errorf("Ignoring. Incomplete action.")
+func errActionIgnoreIncomplete(message string) error {
+	return fmt.Errorf("Ignoring. Incomplete action: %s", message)
 }
 
 func (bot *_bot) errActionUserDne(errmsg string) error {
@@ -49,7 +49,8 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 		actions will have a .action verb, and at least one other parameter.
 	*/
 	if len(parts) < 2 {
-		return errActionIgnoreIncomplete()
+		return errActionIgnoreIncomplete(
+			fmt.Sprintf("Insufficient amount of information: %v\n", parts))
 	}
 
 	action := parts[0]
@@ -58,7 +59,8 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 	case _ACTION_KICK:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 
 		if err := handleActionKick(client, bot, target); err != nil {
@@ -68,7 +70,8 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 	case _ACTION_BAN:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		if err := handleActionBan(client, bot, target); err != nil {
 			return err
@@ -77,7 +80,8 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 	case _ACTION_UNBAN:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		if err := handleActionUnban(client, bot, target); err != nil {
 			return err
@@ -94,12 +98,14 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 			A whisper action must be of the form: `.whisper user message`.
 		*/
 		if len(parts) < 3 {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		message := parts[2:len(parts)]
 		if err := handleActionWhisper(client, bot, target, message...); err != nil {
@@ -109,7 +115,8 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 	case _ACTION_DESIGNATE:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		if err := handleActionDesignate(client, bot, target); err != nil {
 			return err
@@ -118,28 +125,32 @@ func handleAction(client WebsocketClient, bot *_bot, event _event) error {
 	case _ACTION_ADDPRIV:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		handleActionAddpriv(bot, target)
 		break
 	case _ACTION_RMPRIV:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		handleActionRmpriv(bot, target)
 		break
 	case _ACTION_ADDBAN:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		handleActionAddBan(client, bot, target)
 		break
 	case _ACTION_RMBAN:
 		target, acceptable := getTarget(client, bot, parts[1], event)
 		if !acceptable {
-			return errActionIgnoreIncomplete()
+			return errActionIgnoreIncomplete(
+				fmt.Sprintf("Invalid target: %s", parts[1]))
 		}
 		handleActionRmBan(client, bot, target)
 		break

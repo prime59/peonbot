@@ -88,7 +88,7 @@ func TestHandleEventWhisper(t *testing.T) {
 
 func TestHandleEventUserUpdate(t *testing.T) {
 	testbot := getTestbot()
-	raw, event := getEncodedEventUserUpdate("TestUser60", 60)
+	raw, event := getEncodedEventUserUpdate(_TEST_USERNAME_TESTUSER60, _TEST_USERID_60)
 
 	if err := testbot.HandleEvent(raw); err != nil {
 		t.Logf("Got error handling user update event: %+v\n", event)
@@ -105,8 +105,25 @@ func TestHandleEventUserUpdate(t *testing.T) {
 	}
 }
 
-const _TEST_USERID_59_BANNED = 159
-const _TEST_USERNAME_BANNED_BANNEDUSER159 = "BannedUser159"
+func TestHandleEventUserUpdateUserAlreadyExists(t *testing.T) {
+	testbot := getTestbot()
+	raw, event := getEncodedEventUserUpdate(_TEST_USERNAME_TESTUSER59, _TEST_USERID_59)
+
+	if err := testbot.HandleEvent(raw); err != nil {
+		t.Logf("Got error handling user update event: %+v\n", event)
+		t.Errorf("Error: %v\n", err)
+	}
+
+	if strings.Compare(
+		strings.ToUpper(testbot.userTable[event.Payload.UserId]),
+		strings.ToUpper(event.Payload.ToonName)) != 0 {
+
+		t.Errorf("Expected: %s, Actual: %s\n",
+			strings.ToUpper(testbot.userTable[event.Payload.UserId]),
+			strings.ToUpper(event.Payload.ToonName))
+	}
+}
+
 const _TEST_WSEP_TESTHANDLEEVENTUSERUPDATEBANLISTUSER = "TestHandleEventUserUpdateBanlistUser"
 const _ECHO_SERVER_PORT_5959 = "5959"
 
@@ -120,7 +137,7 @@ func TestHandleEventUserUpdateBanlistUser(t *testing.T) {
 		Command:   _REQUEST_BAN,
 		RequestId: _TEST_REQUESTID + 1,
 		Payload: _payloadAction{
-			UserId: _TEST_USERID_59_BANNED,
+			UserId: _TEST_USERID_159_BANNED,
 		},
 	}
 
@@ -136,7 +153,7 @@ func TestHandleEventUserUpdateBanlistUser(t *testing.T) {
 
 	/* Get event that a user on the ban list has joined the channel */
 	rawreq, event := getEncodedEventUserUpdate(
-		_TEST_USERNAME_BANNED_BANNEDUSER159, _TEST_USERID_59_BANNED)
+		_TEST_USERNAME_BANNED_BANNEDUSER159, _TEST_USERID_159_BANNED)
 
 	if err := testbot.HandleEvent(rawreq); err != nil {
 		t.Logf("Got error handling user update event: %+v\n", event)

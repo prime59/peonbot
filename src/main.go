@@ -22,7 +22,6 @@ func main() {
 	/* Connect bot to battle.net */
 	bot := peonbot.New(p.Token(), p.Config.Blist(), p.Config.Greetings(),
 		p.Config.Pusers())
-
 	if err := bot.Start(); err != nil {
 		panic(err)
 	}
@@ -46,7 +45,7 @@ event_loop:
 			bot.Vprintf("Got error reading from websocket: %v\n", err)
 			break event_loop
 		case msg := <-bot.Chsin():
-			bot.SendMessage(msg)
+			bot.HandleMessage(bot.Conn, msg)
 		}
 
 	}

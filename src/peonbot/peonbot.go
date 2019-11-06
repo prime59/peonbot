@@ -34,6 +34,9 @@ type _bot struct {
 	pusers    map[string]interface{}
 }
 
+const _PEONBOT_USERID = -59
+const _PEONBOT_USERNAME = "*SELF"
+
 func New(token string, blist []string, greetings string, pusers []string) *_bot {
 	var bot _bot
 
@@ -42,6 +45,8 @@ func New(token string, blist []string, greetings string, pusers []string) *_bot 
 	bot.token = token
 
 	bot.userTable = make(map[int]string)
+	bot.addSelfToUserTable()
+
 	bot.rid = 0
 
 	bot.chbnt = make(chan []byte)
@@ -56,11 +61,20 @@ func New(token string, blist []string, greetings string, pusers []string) *_bot 
 	// bot.setGreetings(greetings)
 
 	bot.pusers = make(map[string]interface{})
+	bot.addPrivToSelf()
 	bot.addPrivelegedUsers(pusers...)
 
 	bot.Vprintf("%+v\n", bot)
 
 	return &bot
+}
+
+func (bot *_bot) addSelfToUserTable() {
+	bot.userTable[_PEONBOT_USERID] = _PEONBOT_USERNAME
+}
+
+func (bot *_bot) addPrivToSelf() {
+	bot.pusers[strings.ToUpper(_PEONBOT_USERNAME)] = nil
 }
 
 func (bot *_bot) lookupUid(username string) int {

@@ -244,7 +244,7 @@ func TestAuthenticate(t *testing.T) {
 
 	var actual _request
 	expectedPayload := _payloadAuth{ApiKey: token.String()}
-	expected := getExpectedRequest(_REQUEST_AUTH, expectedPayload)
+	expected := getExpectedRequest(_REQUEST_AUTH, 1, expectedPayload)
 
 	testbot.authenticate(client, token.String())
 
@@ -264,7 +264,7 @@ func TestConnectBot(t *testing.T) {
 	testbot := getTestbot()
 
 	var actual _request
-	expected := getExpectedRequest(_REQUEST_CONN, nil)
+	expected := getExpectedRequest(_REQUEST_CONN, 1, nil)
 
 	testbot.connectBot(client)
 

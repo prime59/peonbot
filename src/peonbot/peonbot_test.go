@@ -28,15 +28,19 @@ func (e *echoClient) WriteJSON(v interface{}) error {
 }
 
 const _TEST_USERID_59 = 59
+const _TEST_USERID_60 = 60
 const _TEST_USERID_61 = 61
 const _TEST_USERID_155 = 155
+const _TEST_USERID_159_BANNED = 159
 const _TEST_USERNAME_TESTUSER59 = "TestUser59"
 const _TEST_USERNAME_TESTUSER60 = "TestUser60"
 const _TEST_USERNAME_TESTUSER61_GATEWAY = "TestUser61#Gateway"
 const _TEST_USERNAME_PRIVUSER155 = "PrivUser155#Azeroth"
+const _TEST_USERNAME_BANNED_BANNEDUSER159 = "BannedUser159"
 
 func getTestbot() *_bot {
 	userTable := map[int]string{
+		_PEONBOT_USERID:  _PEONBOT_USERNAME,
 		_TEST_USERID_59:  _TEST_USERNAME_TESTUSER59,
 		_TEST_USERID_61:  _TEST_USERNAME_TESTUSER61_GATEWAY,
 		_TEST_USERID_155: _TEST_USERNAME_PRIVUSER155,
@@ -47,6 +51,7 @@ func getTestbot() *_bot {
 	}
 
 	pusers := map[string]interface{}{
+		strings.ToUpper(_PEONBOT_USERNAME):          nil,
 		strings.ToUpper(_TEST_USERNAME_PRIVUSER155): nil,
 	}
 
