@@ -1,0 +1,10 @@
+# XXX: This not implemented (does not work).
+
+# Specifying a message here will set a default greetings message. The bot
+# will whisper the greetings message to each user who joins the channel.
+# Leave this config file empty, or do not specify a message to leave the
+# greetings message unset.
+
+# NOTE: Setting a new greetings message using the `.setgreet <message>`
+# command will not overwrite what is set here.
+msg: Welcome to the channel

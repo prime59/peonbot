@@ -1,0 +1,13 @@
+# You can grant users access to the chat bot by adding them to this list.
+# Users can have full access or none. Add one user per line. Each line
+# should start with a '-'. Example:
+# users:
+#   - name1#Azeroth
+#   - name2#USEast
+
+# NOTE: Adding users to the bot's priveleged user list using the
+# `.addpriv <username>` command WILL **NOT** update this list.
+users:
+  - Example_Battlenet_Username#Gateway
+  - For_example#USEast
+  - Another_example#Azeroth

@@ -1,0 +1,15 @@
+# XXX: There appears to be a bug in the battle.net bot API. Sending a
+# ban request only kicks the user.
+
+# You can specify users that the bot will auto-ban upon joining your channel.
+# Add one user per line. Each line should start with a '-'. Example:
+# users:
+#   - name1#Azeroth
+#   - name2#USEast
+
+# NOTE: Adding users to the bot's ban list using the `.addban <username>`
+# command WILL **NOT** update this list.
+users:
+  - Example_Battlenet_Username#Gateway
+  - For_example#USEast
+  - Another_example#Azeroth
