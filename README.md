@@ -1,3 +1,8 @@
+With all the Warcraft 3 Reforged news, I got all excited and decided to
+finally write a chat bot using Blizzard's official chat bot API that I've
+had my eye on for awhile. Turns out Warcraft 3 Reforged will be on the new
+battle.net -- oh well! Here it is anyways.
+
 # PeonBot
 
 ![peon](assets/peon.png)
@@ -60,6 +65,10 @@ Issues** section).
 
 ## Usage
 
+Note that this bot is bound to the channel for which it was registered.
+This means it cannot join other channels. This was not my choice. Blizz's
+official chat bot API doesn't support the `/join` command.
+
 Battle.net Chat Command | Bot Action
 --- | ---
 `.say <message>` | Bot echoes message
@@ -93,5 +102,3 @@ kick the user. For now, there is no way to ban a user via a bot command.
 You can alternatively add a user to the ban list and the user will be
 auto-kicked upon channel entry.
 * Set greetings is not currently implemented.
-* Slash `/` commands typed from the bot chat window are not processed as
-their corresponding commands on battle.net.

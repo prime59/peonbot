@@ -20,9 +20,9 @@ $ make shell
 # Testing
 
 The `peonbot` package defined in this project is the primary module of the
-bot, and is close to 80% unit tested:
+bot, and at 80% unit test coverage:
 ```
-ok      peonBot/peonbot 0.007s  coverage: 78.0% of statements
+ok      peonbot/peonbot 0.007s  coverage: 80.0% of statements
 ```
 
 In the small off-chance that someone wants to contribute back to this
